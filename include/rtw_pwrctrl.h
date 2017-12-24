@@ -367,6 +367,7 @@ struct pwrctrl_priv
 #endif /* CONFIG_PNO_SUPPORT */
 #endif /* CONFIG_WOWLAN */
 	_timer 	pwr_state_check_timer;
+	_adapter *adapter;
 	int		pwr_state_check_interval;
 	u8		pwr_state_check_cnts;
 

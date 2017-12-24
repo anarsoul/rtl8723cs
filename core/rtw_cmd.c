@@ -3405,9 +3405,10 @@ exit:
 	return res;
 }
 
-void rtw_dfs_master_timer_hdl(RTW_TIMER_HDL_ARGS)
+void rtw_dfs_master_timer_hdl(struct timer_list *t)
 {
-	_adapter *adapter = (_adapter *)FunctionContext;
+	_adapter *adapter =
+		from_timer(adapter, t, pmlmepriv->dfs_master_timer);
 
 	rtw_dfs_master_cmd(adapter, _TRUE);
 }

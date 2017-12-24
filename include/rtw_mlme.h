@@ -782,8 +782,8 @@ extern void rtw_wmm_event_callback(PADAPTER padapter, u8 *pbuf);
 #ifdef CONFIG_IEEE80211W
 void rtw_sta_timeout_event_callback(_adapter *adapter, u8 *pbuf);
 #endif /* CONFIG_IEEE80211W */
-extern void rtw_join_timeout_handler(RTW_TIMER_HDL_ARGS);
-extern void _rtw_scan_timeout_handler(RTW_TIMER_HDL_ARGS);
+extern void rtw_join_timeout_handler(struct timer_list *t);
+extern void _rtw_scan_timeout_handler(struct timer_list *t);
 
 thread_return event_thread(thread_context context);
 
@@ -915,10 +915,10 @@ extern void rtw_update_registrypriv_dev_network(_adapter *adapter);
 
 extern void rtw_get_encrypt_decrypt_from_registrypriv(_adapter *adapter);
 
-extern void _rtw_join_timeout_handler(_adapter *adapter);
-extern void rtw_scan_timeout_handler(_adapter *adapter);
+extern void _rtw_join_timeout_handler(struct timer_list *t);
+extern void rtw_scan_timeout_handler(struct timer_list *t);
 
-extern void rtw_dynamic_check_timer_handlder(_adapter *adapter);
+extern void rtw_dynamic_check_timer_handler(_adapter *adapter);
 #ifdef CONFIG_SET_SCAN_DENY_TIMER
 bool rtw_is_scan_deny(_adapter *adapter);
 void rtw_clear_scan_deny(_adapter *adapter);

@@ -30,7 +30,7 @@
 
 
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
-void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS);
+static void rtw_signal_stat_timer_hdl(struct timer_list *t);
 
 enum {
 	SIGNAL_STAT_CALC_PROFILE_0 = 0,
@@ -138,7 +138,8 @@ _func_enter_;
 	res = rtw_hal_init_recv_priv(padapter);
 
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
-	rtw_init_timer(&precvpriv->signal_stat_timer, padapter, RTW_TIMER_HDL_NAME(signal_stat));
+	timer_setup(&precvpriv->signal_stat_timer, rtw_signal_stat_timer_hdl,
+		    0);
 
 	precvpriv->signal_stat_sampling_interval = 2000; //ms
 	//precvpriv->signal_stat_converging_constant = 5000; //ms
@@ -3578,10 +3579,11 @@ _err_exit:
 }
 
 
-void rtw_reordering_ctrl_timeout_handler(void *pcontext)
+void rtw_reordering_ctrl_timeout_handler(struct timer_list *t)
 {
 	_irqL irql;
-	struct recv_reorder_ctrl *preorder_ctrl = (struct recv_reorder_ctrl *)pcontext;
+	struct recv_reorder_ctrl *preorder_ctrl =
+		from_timer(preorder_ctrl, t, reordering_ctrl_timer);
 	_adapter *padapter = preorder_ctrl->padapter;
 	_queue *ppending_recvframe_queue = &preorder_ctrl->pending_recvframe_queue;
 
@@ -4609,8 +4611,10 @@ _func_exit_;
 }
 
 #ifdef CONFIG_NEW_SIGNAL_STAT_PROCESS
-void rtw_signal_stat_timer_hdl(RTW_TIMER_HDL_ARGS){
-	_adapter *adapter = (_adapter *)FunctionContext;
+static void rtw_signal_stat_timer_hdl(struct timer_list *t)
+{
+	_adapter *adapter =
+		from_timer(adapter, t, recvpriv.signal_stat_timer);
 	struct recv_priv *recvpriv = &adapter->recvpriv;
 	
 	u32 tmp_s, tmp_q;

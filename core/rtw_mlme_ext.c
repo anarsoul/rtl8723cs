@@ -12508,8 +12508,10 @@ void linked_status_chk(_adapter *padapter, u8 from_timer)
 
 }
 
-void survey_timer_hdl(_adapter *padapter)
+void survey_timer_hdl(struct timer_list *t)
 {
+	_adapter *padapter =
+		from_timer(padapter, t, mlmeextpriv.survey_timer);
 	struct cmd_obj *cmd;
 	struct sitesurvey_parm *psurveyPara;
 	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
@@ -12540,8 +12542,10 @@ exit:
 	return;
 }
 
-void link_timer_hdl(_adapter *padapter)
+void link_timer_hdl(struct timer_list *t)
 {
+	_adapter *padapter =
+		from_timer(padapter, t, mlmeextpriv.link_timer);
 	//static unsigned int		rx_pkt = 0;
 	//static u64				tx_cnt = 0;
 	//struct xmit_priv		*pxmitpriv = &(padapter->xmitpriv);
@@ -12659,8 +12663,9 @@ void link_timer_hdl(_adapter *padapter)
 	return;
 }
 
-void addba_timer_hdl(struct sta_info *psta)
+void addba_timer_hdl(struct timer_list *t)
 {
+	struct sta_info *psta = from_timer(psta, t, addba_retry_timer);
 #ifdef CONFIG_80211N_HT
 	struct ht_priv	*phtpriv;
 
@@ -12746,8 +12751,9 @@ void clnt_sa_query_timeout(_adapter *padapter)
 	DBG_871X("SA query timeout client disconnect\n");
 }
 
-void sa_query_timer_hdl(struct sta_info *psta)
+void sa_query_timer_hdl(struct timer_list *t)
 {
+	struct sta_info *psta = from_timer(psta, t, dot11w_expire_timer);
 	_adapter *padapter = psta->padapter;
 	_irqL irqL;
 	struct sta_priv *pstapriv = &padapter->stapriv;

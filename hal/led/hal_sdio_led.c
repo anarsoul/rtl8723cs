@@ -1066,8 +1066,9 @@ void BlinkHandler(PLED_SDIO	pLed)
 //		Callback function of LED BlinkTimer, 
 //		it just schedules to corresponding BlinkWorkItem/led_blink_hdl
 //
-void BlinkTimerCallback(void *data)
+void BlinkTimerCallback(struct timer_list *t)
 {
+#if 0
 	PLED_SDIO	 pLed = (PLED_SDIO)data;
 	_adapter		*padapter = pLed->padapter;
 
@@ -1086,6 +1087,7 @@ void BlinkTimerCallback(void *data)
 	#else
 	_set_workitem(&(pLed->BlinkWorkItem));
 	#endif
+#endif
 }
 
 //
@@ -2395,7 +2397,7 @@ InitLed(
 
 	ResetLedStatus(pLed);
 
-	_init_timer(&(pLed->BlinkTimer), padapter->pnetdev, BlinkTimerCallback, pLed);
+	timer_setup(&(pLed->BlinkTimer), BlinkTimerCallback, 0);
 
 	_init_workitem(&(pLed->BlinkWorkItem), BlinkWorkItemCallback, pLed);
 }

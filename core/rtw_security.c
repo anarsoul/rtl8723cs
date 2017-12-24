@@ -3213,32 +3213,6 @@ int tdls_verify_mic(u8 *kck, u8 trans_seq,
 }
 #endif //CONFIG_TDLS
 
-void rtw_use_tkipkey_handler(RTW_TIMER_HDL_ARGS)
-{
-        _adapter *padapter = (_adapter *)FunctionContext;
-
-_func_enter_;			
-
-	RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("^^^rtw_use_tkipkey_handler ^^^\n"));
-	
-/*
-	if (RTW_CANNOT_RUN(padapter)) {
-			RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("^^^rtw_use_tkipkey_handler (padapter->bDriverStopped %s)(padapter->bSurpriseRemoved %s)^^^\n"
-			, rtw_is_drv_stopped(padapter)?"True":"False"
-			, rtw_is_surprise_removed(padapter)?"True":"False"));
-
-		return;
-	}
-	*/
-	
-	padapter->securitypriv.busetkipkey=_TRUE;
-
-	RT_TRACE(_module_rtl871x_security_c_,_drv_err_,("^^^rtw_use_tkipkey_handler padapter->securitypriv.busetkipkey=%d^^^\n",padapter->securitypriv.busetkipkey));
-
-_func_exit_;	
-
-}
-
 /* Restore HW wep key setting according to key_mask */
 void rtw_sec_restore_wep_key(_adapter *adapter)
 {

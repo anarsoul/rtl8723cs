@@ -1975,11 +1975,10 @@ odm_EVM_Enhance_AntDiv(
 }
 
 VOID
-odm_EVM_FastAntTrainingCallback(
-	IN		PVOID		pDM_VOID
-	)
+odm_EVM_FastAntTrainingCallback(struct timer_list *t)
 {
-	PDM_ODM_T		pDM_Odm = (PDM_ODM_T)pDM_VOID;
+	PDM_ODM_T *pDM_Odm =
+		from_timer(pDM_Odm, t, DM_SWAT_Table.EVM_FastAntTrainingTimer);
 	ODM_RT_TRACE(pDM_Odm,ODM_COMP_ANT_DIV, ODM_DBG_LOUD, ("******odm_EVM_FastAntTrainingCallback****** \n"));
 	odm_HW_AntDiv(pDM_Odm);
 }
@@ -2776,9 +2775,10 @@ ODM_SW_AntDiv_WorkitemCallback(
 }
 
 VOID
-ODM_SW_AntDiv_Callback(void *FunctionContext)
+ODM_SW_AntDiv_Callback(struct timer_list *t)
 {
-	PDM_ODM_T	pDM_Odm= (PDM_ODM_T)FunctionContext;
+	PDM_ODM_T *pDM_Odm =
+		from_timer(pDM_Odm, t, DM_SWAT_Table.SwAntennaSwitchTimer_8723B);
 	PADAPTER	padapter = pDM_Odm->Adapter;
 	if(padapter->net_closed == _TRUE)
 		return;
@@ -3234,11 +3234,10 @@ odm_FastAntTraining(
 }
 
 VOID
-odm_FastAntTrainingCallback(
-	IN		PVOID		pDM_VOID
-	)
+odm_FastAntTrainingCallback(struct timer_list *t)
 {
-	PDM_ODM_T		pDM_Odm = (PDM_ODM_T)pDM_VOID;
+	PDM_ODM_T *pDM_Odm =
+		from_timer(pDM_Odm, t, DM_SWAT_Table.FastAntTrainingTimer);
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_CE)
 	PADAPTER	padapter = pDM_Odm->Adapter;

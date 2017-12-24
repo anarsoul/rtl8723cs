@@ -426,10 +426,12 @@ exit:
 	return;
 }
 
-void pwr_state_check_handler(RTW_TIMER_HDL_ARGS);
-void pwr_state_check_handler(RTW_TIMER_HDL_ARGS)
+static void pwr_state_check_handler(struct timer_list *t)
 {
-	_adapter *padapter = (_adapter *)FunctionContext;
+	struct pwrctrl_priv *pwrctrlpriv =
+		from_timer(pwrctrlpriv, t, pwr_state_check_timer);
+	_adapter *padapter = pwrctrlpriv->adapter;
+
 	rtw_ps_cmd(padapter);
 }
 
@@ -1576,14 +1578,10 @@ exit:
 /*
  * This function is a timer handler, can't do any IO in it.
  */
-static void pwr_rpwm_timeout_handler(void *FunctionContext)
+static void pwr_rpwm_timeout_handler(struct timer_list *t)
 {
-	PADAPTER padapter;
-	struct pwrctrl_priv *pwrpriv;
+	struct pwrctrl_priv *pwrpriv = from_timer(pwrpriv, t, pwr_rpwm_timer);
 
-
-	padapter = (PADAPTER)FunctionContext;
-	pwrpriv = adapter_to_pwrctl(padapter);
 	DBG_871X("+%s: rpwm=0x%02X cpwm=0x%02X\n", __func__, pwrpriv->rpwm, pwrpriv->cpwm);
 
 	if ((pwrpriv->rpwm == pwrpriv->cpwm) || (pwrpriv->cpwm >= PS_STATE_S2))
@@ -2154,12 +2152,14 @@ _func_enter_;
 
 #ifdef CONFIG_LPS_RPWM_TIMER
 	pwrctrlpriv->brpwmtimeout = _FALSE;
+	pwrctrlpriv->adapter = padapter;
 	_init_workitem(&pwrctrlpriv->rpwmtimeoutwi, rpwmtimeout_workitem_callback, NULL);
-	_init_timer(&pwrctrlpriv->pwr_rpwm_timer, padapter->pnetdev, pwr_rpwm_timeout_handler, padapter);
+	timer_setup(&pwrctrlpriv->pwr_rpwm_timer, pwr_rpwm_timeout_handler, 0);
 #endif // CONFIG_LPS_RPWM_TIMER
 #endif // CONFIG_LPS_LCLK
 
-	rtw_init_timer(&pwrctrlpriv->pwr_state_check_timer, padapter, pwr_state_check_handler);
+	timer_setup(&pwrctrlpriv->pwr_state_check_timer,
+		    pwr_state_check_handler, 0);
 
 	pwrctrlpriv->wowlan_mode = _FALSE;
 	pwrctrlpriv->wowlan_ap_mode = _FALSE;

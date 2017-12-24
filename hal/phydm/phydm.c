@@ -1387,16 +1387,19 @@ ODM_InitAllTimers(
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_AP)
 #ifdef MP_TEST
+#error InitializeTimer not converted
 	if (pDM_Odm->priv->pshare->rf_ft_var.mp_specific) 
 		ODM_InitializeTimer(pDM_Odm, &pDM_Odm->MPT_DIGTimer, 
 			(RT_TIMER_CALL_BACK)odm_MPT_DIGCallback, NULL, "MPT_DIGTimer");	
 #endif
 #elif(DM_ODM_SUPPORT_TYPE == ODM_WIN)
+#error InitializeTimer not converted
 	ODM_InitializeTimer(pDM_Odm, &pDM_Odm->MPT_DIGTimer, 
 		(RT_TIMER_CALL_BACK)odm_MPT_DIGCallback, NULL, "MPT_DIGTimer");
 #endif
 
 #if (DM_ODM_SUPPORT_TYPE == ODM_WIN)
+#error InitializeTimer not converted
 	ODM_InitializeTimer(pDM_Odm, &pDM_Odm->PSDTimer, 
 		(RT_TIMER_CALL_BACK)dm_PSDMonitorCallback, NULL, "PSDTimer");
 	ODM_InitializeTimer(pDM_Odm, &pDM_Odm->PathDivSwitchTimer, 
@@ -1408,6 +1411,7 @@ ODM_InitAllTimers(
 	ODM_InitializeTimer(pDM_Odm, &pDM_Odm->sbdcnt_timer,
 		(RT_TIMER_CALL_BACK)phydm_sbd_callback, NULL, "SbdTimer"); 
 #if (BEAMFORMING_SUPPORT == 1)
+#error InitializeTimer not converted
 	ODM_InitializeTimer(pDM_Odm, &pDM_Odm->BeamformingInfo.TxbfInfo.Txbf_FwNdpaTimer,
 		(RT_TIMER_CALL_BACK)halComTxbf_FwNdpaTimerCallback, NULL, "Txbf_FwNdpaTimer");
 #endif
@@ -1415,6 +1419,7 @@ ODM_InitAllTimers(
 
 #if (DM_ODM_SUPPORT_TYPE & (ODM_WIN | ODM_CE))
 #if (BEAMFORMING_SUPPORT == 1)
+#error InitializeTimer not converted
 	ODM_InitializeTimer(pDM_Odm, &pDM_Odm->BeamformingInfo.BeamformingTimer,
 		(RT_TIMER_CALL_BACK)Beamforming_SWTimerCallback, NULL, "BeamformingTimer");
 #endif

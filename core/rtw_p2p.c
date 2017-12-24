@@ -3643,9 +3643,10 @@ _func_enter_;
 _func_exit_;
 }
 
-static void ro_ch_timer_process (void *FunctionContext)
+static void ro_ch_timer_process (struct timer_list *t)
 {
-	_adapter *adapter = (_adapter *)FunctionContext;
+	_adapter *adapter = from_timer(adapter, t,
+						  cfg80211_wdinfo.remain_on_ch_timer);
 	struct rtw_wdev_priv *pwdev_priv = adapter_wdev_data(adapter);
 
 	//printk("%s \n", __FUNCTION__);
@@ -4456,7 +4457,7 @@ void rtw_init_cfg80211_wifidirect_info( _adapter*	padapter)
 
 	_rtw_memset(pcfg80211_wdinfo, 0x00, sizeof(struct cfg80211_wifidirect_info) );
     
-	_init_timer( &pcfg80211_wdinfo->remain_on_ch_timer, padapter->pnetdev, ro_ch_timer_process, padapter );
+	timer_setup( &pcfg80211_wdinfo->remain_on_ch_timer, ro_ch_timer_process, 0);
 }
 #endif //CONFIG_IOCTL_CFG80211	
 
@@ -5170,13 +5171,13 @@ void rtw_init_wifidirect_timers(_adapter* padapter)
 {
 	struct wifidirect_info *pwdinfo = &padapter->wdinfo;
 
-	_init_timer( &pwdinfo->find_phase_timer, padapter->pnetdev, find_phase_timer_process, padapter );
-	_init_timer( &pwdinfo->restore_p2p_state_timer, padapter->pnetdev, restore_p2p_state_timer_process, padapter );
-	_init_timer( &pwdinfo->pre_tx_scan_timer, padapter->pnetdev, pre_tx_scan_timer_process, padapter );
-	_init_timer( &pwdinfo->reset_ch_sitesurvey, padapter->pnetdev, reset_ch_sitesurvey_timer_process, padapter );
-	_init_timer( &pwdinfo->reset_ch_sitesurvey2, padapter->pnetdev, reset_ch_sitesurvey_timer_process2, padapter );
+	//_init_timer( &pwdinfo->find_phase_timer, padapter->pnetdev, find_phase_timer_process, padapter );
+	//_init_timer( &pwdinfo->restore_p2p_state_timer, padapter->pnetdev, restore_p2p_state_timer_process, padapter );
+	//_init_timer( &pwdinfo->pre_tx_scan_timer, padapter->pnetdev, pre_tx_scan_timer_process, padapter );
+	//_init_timer( &pwdinfo->reset_ch_sitesurvey, padapter->pnetdev, reset_ch_sitesurvey_timer_process, padapter );
+	//_init_timer( &pwdinfo->reset_ch_sitesurvey2, padapter->pnetdev, reset_ch_sitesurvey_timer_process2, padapter );
 #ifdef CONFIG_CONCURRENT_MODE
-	_init_timer( &pwdinfo->ap_p2p_switch_timer, padapter->pnetdev, ap_p2p_switch_timer_process, padapter );
+	//_init_timer( &pwdinfo->ap_p2p_switch_timer, padapter->pnetdev, ap_p2p_switch_timer_process, padapter );
 #endif
 }
 

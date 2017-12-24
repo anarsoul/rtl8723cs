@@ -963,11 +963,11 @@ void linked_status_chk(_adapter *padapter, u8 from_timer);
 
 void _linked_info_dump(_adapter *padapter);
 
-void survey_timer_hdl (_adapter *padapter);
-void link_timer_hdl (_adapter *padapter);
-void addba_timer_hdl(struct sta_info *psta);
+void survey_timer_hdl (struct timer_list *t);
+void link_timer_hdl (struct timer_list *t);
+void addba_timer_hdl(struct timer_list *t);
 #ifdef CONFIG_IEEE80211W
-void sa_query_timer_hdl(struct sta_info *psta);
+void sa_query_timer_hdl(struct timer_list *t);
 #endif //CONFIG_IEEE80211W
 //void reauth_timer_hdl(_adapter *padapter);
 //void reassoc_timer_hdl(_adapter *padapter);

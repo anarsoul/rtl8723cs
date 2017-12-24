@@ -2863,8 +2863,10 @@ _func_exit_;
 * _rtw_join_timeout_handler - Timeout/faliure handler for CMD JoinBss
 * @adapter: pointer to _adapter structure
 */
-void _rtw_join_timeout_handler (_adapter *adapter)
+void _rtw_join_timeout_handler(struct timer_list *t)
 {
+	_adapter *adapter = from_timer(adapter, t,
+						  mlmepriv.assoc_timer);
 	_irqL irqL;
 	struct	mlme_priv *pmlmepriv = &adapter->mlmepriv;
 
@@ -2942,8 +2944,10 @@ _func_exit_;
 * rtw_scan_timeout_handler - Timeout/Faliure handler for CMD SiteSurvey
 * @adapter: pointer to _adapter structure
 */
-void rtw_scan_timeout_handler (_adapter *adapter)
+void rtw_scan_timeout_handler(struct timer_list *t)
 {	
+	_adapter *adapter = from_timer(adapter, t,
+						  mlmepriv.scan_to_timer);
 	_irqL irqL;
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;
 	DBG_871X(FUNC_ADPT_FMT" fw_state=%x\n", FUNC_ADPT_ARG(adapter), get_fwstate(pmlmepriv));
@@ -3058,7 +3062,7 @@ static void rtw_auto_scan_handler(_adapter *padapter)
 	
 }
 
-void rtw_dynamic_check_timer_handlder(_adapter *adapter)
+void rtw_dynamic_check_timer_handler(_adapter *adapter)
 {
 #ifdef CONFIG_AP_MODE
 	struct mlme_priv *pmlmepriv = &adapter->mlmepriv;

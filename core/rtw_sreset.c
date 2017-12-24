@@ -286,7 +286,8 @@ void sreset_stop_adapter(_adapter *padapter)
 	if (check_fwstate(pmlmepriv, _FW_UNDER_LINKING))
 	{
 		rtw_set_to_roam(padapter, 0);
-		_rtw_join_timeout_handler(padapter);
+		printk("%s %d\n", __func__, __LINE__);
+		//_rtw_join_timeout_handler(padapter);
 	}
 
 }
